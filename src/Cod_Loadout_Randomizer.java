@@ -16,30 +16,30 @@ public class Cod_Loadout_Randomizer {
         boolean done = false;
 
         //create scanner object
-        Scanner input = new Scanner (System.in);
+        Scanner input = new Scanner(System.in);
 
         //checks to see if the user would like to continue
         while (!done) {
 
             //create objects and array for class objects
             //primary
-            Primary [] primaryGuns = new Primary[45];
+            Primary[] primaryGuns = new Primary[45];
             createPrimaryArray(primaryGuns);
 
             //secondary
-            Secondary [] secondaryGuns = new Secondary[13];
+            Secondary[] secondaryGuns = new Secondary[13];
             createSecondaryArray(secondaryGuns);
 
             //secondary
-            Perk [] perks = new Perk[18];
+            Perk[] perks = new Perk[18];
             createPerkArray(perks);
 
             //lethals
-            Lethal [] lethals = new Lethal[8];
+            Lethal[] lethals = new Lethal[8];
             createLethalArray(lethals);
 
             //tacticals
-            Tactical [] tacticals = new Tactical[8];
+            Tactical[] tacticals = new Tactical[8];
             createTacticalArray(tacticals);
 
             //prints class
@@ -48,54 +48,57 @@ public class Cod_Loadout_Randomizer {
             //prompt user to see if they want another class
             boolean continueComputing = continueComputing(input);
 
+            //if they don't want to continue
             if (!continueComputing) {
                 done = true;
                 System.out.println("\nHave fun my dood\n");
             }
 
+            //if they do want to continue
             else {
                 System.out.println("****************************************\n");
             }
 
-        }
+        }//end while
 
     }//end main
 
-    public static boolean continueComputing (Scanner input)
-    {
-        boolean userInputBoolean = true;
+    //continueComputing method gets user input and checks to see if the user would like to continue
+    //creating classes
+    public static boolean continueComputing(Scanner input) {
+        //variable used to track if they want to continue or not
+        boolean userInput = false;
 
         System.out.println("****************************************");
         System.out.println("Would you like to create another class (y/n)");
-        char userChoice = input.next().charAt(0);
+        char userChoice = input.next().charAt(0); //used to read in user choice from input
 
         //checks for valid user input
-        while (userChoice != 'y' && userChoice != 'Y' && userChoice != 'n' && userChoice != 'N')
-        {
+        while (userChoice != 'y' && userChoice != 'Y' && userChoice != 'n' && userChoice != 'N') {
             System.out.println("Please enter a valid input (y/n)");
             userChoice = input.next().charAt(0);
         }
 
-        if (userChoice == 'y' || userChoice == 'Y')
-        {
-            userInputBoolean = true;
+        //if yes
+        if (userChoice == 'y' || userChoice == 'Y') {
+            userInput = true;
         }
 
-        if (userChoice == 'n' || userChoice == 'N')
-        {
-            userInputBoolean = false;
-        }
+        return userInput;
 
-        return userInputBoolean;
     } // end continueComputing
 
-    public static void printClass(Primary primary[], Secondary secondary[], Perk perks[], Lethal lethals[], Tactical tacticals[]) {
+    /*
+    Method printClass takes in the arrays of gun objects, assigns random array index of objects to instance variables,
+    then prints out the class details
+    */
+    public static void printClass(Primary[] primary, Secondary[] secondary, Perk[] perks, Lethal[] lethals, Tactical[] tacticals) {
 
         //print class
         System.out.println("Here is your random loadout bois:");
         System.out.println("-----------------------------------");
 
-        //set class variables then assign object when applicable
+        //set instance variables then assign object when applicable
         boolean overkill = false;
         Primary primaryGun = null;
         Secondary secondaryGun = null;
@@ -106,6 +109,7 @@ public class Cod_Loadout_Randomizer {
         Lethal lethal1 = null;
         Tactical tactical1 = null;
 
+        //assign object based on random number generated for array index then stores in instance variables
         primaryGun = primary[randomNum(0, 44)];
         perk1 = perks[randomNum(0, 5)];
         perk2 = perks[randomNum(6, 11)];
@@ -113,12 +117,17 @@ public class Cod_Loadout_Randomizer {
         lethal1 = lethals[randomNum(0, 7)];
         tactical1 = tacticals[randomNum(0, 7)];
 
-        //		perk2 = perks[10];//sets perk2 to overkill
+        //		perk2 = perks[10]; //sets perk2 to overkill for testing (two primaries)
 
+        //if overkill perk is picked, the class needs 2 primary weapons
         if (perk2.getPerk().equals("Overkill")) {
+
             overkill = true;
-//			System.out.println("Overkill = true");
+
+            //assigns another primary to overkillGun rather than using a secondary
             overkillGun = primary[randomNum(0, 44)];
+
+            //if the overkill gun equals the primary, assign new primary to overkill gun to avoid duplicate
             while (overkillGun.getName().equals(primaryGun.getName())) {
                 overkillGun = primary[randomNum(0, 44)];
             }
@@ -130,11 +139,11 @@ public class Cod_Loadout_Randomizer {
             System.out.printf("Lethal: %s\nTactical: %s\n\n", lethal1.getName(), tactical1.getName());
         }
 
+        //print class without overkill. i.e. a primary and secondary
         else {
             secondaryGun = secondary[randomNum(0, 12)];
 
             //print class details
-//			System.out.println("Overkill = false");
             System.out.printf("Primary:\n%s %d: %s\n\n", primaryGun.getType(), primaryGun.getNumber(), primaryGun.getName());
             System.out.printf("Secondary:\n%s %d: %s\n\n", secondaryGun.getType(), secondaryGun.getNumber(), secondaryGun.getName());
             System.out.printf("Perk 1: %s\nPerk 2: %s\nPerk 3: %s\n\n", perk1.getPerk(), perk2.getPerk(), perk3.getPerk());
@@ -143,42 +152,47 @@ public class Cod_Loadout_Randomizer {
 
     }//end printClass
 
+    /*
+    randomNum method takes in the range of values then creates a random number and returns it
+     */
     public static int randomNum(int min, int max) {
         // define the range
         int range = max - min + 1;
-        //        System.out.println("range: " + range);
-        //        System.out.println("max: " + max);
-        //        System.out.println("min: " + min);
-        int rand = (int)(Math.random() * range) + min;
+        int rand = (int) (Math.random() * range) + min;
 
-        //debugging
-        //        while (rand != 0) {
-        //        	System.out.println(rand);
-        //        	rand = (int)(Math.random() * range) + min;
-        //        }//end debugging
-        //
-        //        System.out.println("rand: " + rand);
+//        debugging statement used to test if rand is creating all values -> store testing value in rangeTest variable
+//                int rangeTest = 0;
+
+//                while (rand != rangeTest) {
+//                	System.out.println(rand);
+//                	rand = (int)(Math.random() * range) + min;
+//                }
+//
+//                System.out.println("rand: " + rand);
 
         return rand;
-    }
+    }// end randomNum
 
-    public static void createPrimaryArray(Primary guns[]) {
+    /*
+    createPrimaryArray method stores all possible primary weapons in arrays
+     */
+    public static void createPrimaryArray(Primary[] guns) {
 
         //create gun objects for all guns
         //ARs
-        Primary ar1 = new Primary("Kilo", 1, "Assult Rifle");
-        Primary ar2 = new Primary("Fal", 2, "Assult Rifle");
-        Primary ar3 = new Primary("M4A1", 3, "Assult Rifle");
-        Primary ar4 = new Primary("FR 5.56", 4, "Assult Rifle");
-        Primary ar5 = new Primary("Oden", 5, "Assult Rifle");
-        Primary ar6 = new Primary("M13", 6, "Assult Rifle");
-        Primary ar7 = new Primary("Scar", 7, "Assult Rifle");
-        Primary ar8 = new Primary("AK-47", 8, "Assult Rifle");
-        Primary ar9 = new Primary("Ram-7", 9, "Assult Rifle");
-        Primary ar10 = new Primary("Grau 5.56", 10, "Assult Rifle");
-        Primary ar11 = new Primary("CR-56 Amax", 11, "Assult Rifle");
-        Primary ar12 = new Primary("AN-94", 12, "Assult Rifle");
-        Primary ar13 = new Primary("AS VAL", 13, "Assult Rifle");
+        Primary ar1 = new Primary("Kilo", 1, "Assault Rifle");
+        Primary ar2 = new Primary("Fal", 2, "Assault Rifle");
+        Primary ar3 = new Primary("M4A1", 3, "Assault Rifle");
+        Primary ar4 = new Primary("FR 5.56", 4, "Assault Rifle");
+        Primary ar5 = new Primary("Oden", 5, "Assault Rifle");
+        Primary ar6 = new Primary("M13", 6, "Assault Rifle");
+        Primary ar7 = new Primary("Scar", 7, "Assault Rifle");
+        Primary ar8 = new Primary("AK-47", 8, "Assault Rifle");
+        Primary ar9 = new Primary("Ram-7", 9, "Assault Rifle");
+        Primary ar10 = new Primary("Grau 5.56", 10, "Assault Rifle");
+        Primary ar11 = new Primary("CR-56 Amax", 11, "Assault Rifle");
+        Primary ar12 = new Primary("AN-94", 12, "Assault Rifle");
+        Primary ar13 = new Primary("AS VAL", 13, "Assault Rifle");
 
         //smgs
         Primary smg1 = new Primary("AUG", 1, "Sub Machine Gun");
@@ -222,7 +236,7 @@ public class Cod_Loadout_Randomizer {
         Primary snip4 = new Primary("Rytec AMR", 4, "Sniper Rifle");
 
         //melee
-        Primary riot = new Primary ("Riot Shield", 1, "Melee");
+        Primary riot = new Primary("Riot Shield", 1, "Melee");
 
         //put guns into array
         guns[0] = ar1;
@@ -279,7 +293,10 @@ public class Cod_Loadout_Randomizer {
 
     }//end createPrimaryArray
 
-    public static void createSecondaryArray(Secondary guns[]) {
+    /*
+    createSecondaryArray method stores all possible secondary weapons in arrays
+    */
+    public static void createSecondaryArray(Secondary[] guns) {
 
         //pistols
         Secondary pis1 = new Secondary("X16", 1, "Pistol");
@@ -319,7 +336,10 @@ public class Cod_Loadout_Randomizer {
 
     }//end createSecondaryArray
 
-    public static void createPerkArray(Perk perks[]) {
+    /*
+    createPerkArray method stores all possible perks in arrays
+    */
+    public static void createPerkArray(Perk[] perks) {
 
         //tier1
         Perk perk1 = new Perk("Double Time", 1);
@@ -346,6 +366,7 @@ public class Cod_Loadout_Randomizer {
         Perk perk18 = new Perk("Tracker", 3);
 
         //place perks into array
+        //tier 1
         perks[0] = perk1;
         perks[1] = perk2;
         perks[2] = perk3;
@@ -353,6 +374,7 @@ public class Cod_Loadout_Randomizer {
         perks[4] = perk5;
         perks[5] = perk6;
 
+        //tier 2
         perks[6] = perk7;
         perks[7] = perk8;
         perks[8] = perk9;
@@ -360,6 +382,7 @@ public class Cod_Loadout_Randomizer {
         perks[10] = perk11;
         perks[11] = perk12;
 
+        //tier 3
         perks[12] = perk13;
         perks[13] = perk14;
         perks[14] = perk15;
@@ -369,7 +392,10 @@ public class Cod_Loadout_Randomizer {
 
     }//end createPerkArray
 
-    public static void createLethalArray (Lethal lethals[]) {
+    /*
+    createLethalArray method stores all possible lethal equipment in arrays
+    */
+    public static void createLethalArray(Lethal[] lethals) {
 
         //create objects
         Lethal lethal1 = new Lethal("Frag Grenade");
@@ -393,7 +419,10 @@ public class Cod_Loadout_Randomizer {
 
     }//end createLethalArray
 
-    public static void createTacticalArray (Tactical tacticals[]) {
+    /*
+    createTacticalArray method stores all possible tactical equipment in arrays
+    */
+    public static void createTacticalArray(Tactical[] tacticals) {
 
         //create objects
         Tactical tac1 = new Tactical("Stun Grenade");
@@ -419,6 +448,9 @@ public class Cod_Loadout_Randomizer {
 
 }//end Loadout_Randomizer
 
+/*
+Primary Class defines a primary weapon and the attributes it will have
+ */
 class Primary {
 
     //private data fields
@@ -430,11 +462,11 @@ class Primary {
      * public methods
      */
     //constructor
-    public Primary (String name, int number, String type) {
+    public Primary(String name, int number, String type) {
         this.name = name;
         this.number = number;
         this.type = type;
-    }
+    }// end constructor
 
     //getters
     public String getName() {
@@ -451,6 +483,9 @@ class Primary {
 
 }//end Primary
 
+/*
+Secondary Class defines a secondary weapon and the attributes it will have
+ */
 class Secondary {
 
     //private data fields
@@ -459,11 +494,11 @@ class Secondary {
     private String type;
 
     //constructor
-    public Secondary (String name, int number, String type) {
+    public Secondary(String name, int number, String type) {
         this.name = name;
         this.number = number;
         this.type = type;
-    }
+    }// end constructor
 
     //getters
     public String getName() {
@@ -480,6 +515,9 @@ class Secondary {
 
 }//end secondary
 
+/*
+Perk Class defines a perk and the attributes it will have
+ */
 class Perk {
 
     //private data fields
@@ -487,10 +525,10 @@ class Perk {
     private int tier;
 
     //constructor
-    public Perk (String name, int tier) {
+    public Perk(String name, int tier) {
         this.name = name;
         this.tier = tier;
-    }
+    }// end constructor
 
     //getter
     public String getPerk() {
@@ -503,13 +541,16 @@ class Perk {
 
 }//end Perk
 
+/*
+Lethal Class defines a piece of lethal equipment and the attributes it will have
+ */
 class Lethal {
 
     //private data fields
     private String name;
 
     //constructor
-    public Lethal (String name) {
+    public Lethal(String name) {
         this.name = name;
     }
 
@@ -519,13 +560,16 @@ class Lethal {
     }
 }//end Lethal
 
+/*
+Tactical Class defines a piece of tactical equipment and the attributes it will have
+ */
 class Tactical {
 
     //private data fields
     private String name;
 
     //constructor
-    public Tactical (String name) {
+    public Tactical(String name) {
         this.name = name;
     }
 
