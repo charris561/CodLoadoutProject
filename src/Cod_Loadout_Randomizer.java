@@ -23,7 +23,7 @@ public class Cod_Loadout_Randomizer {
 
             //create objects and array for class objects
             //primary
-            Primary[] primaryGuns = new Primary[45];
+            Primary[] primaryGuns = new Primary[47];
             createPrimaryArray(primaryGuns);
 
             //secondary
@@ -110,7 +110,7 @@ public class Cod_Loadout_Randomizer {
         Tactical tactical1 = null;
 
         //assign object based on random number generated for array index then stores in instance variables
-        primaryGun = primary[randomNum(0, 44)];
+        primaryGun = primary[randomNum(0, 46)];
         perk1 = perks[randomNum(0, 5)];
         perk2 = perks[randomNum(6, 11)];
         perk3 = perks[randomNum(12, 17)];
@@ -125,11 +125,11 @@ public class Cod_Loadout_Randomizer {
             overkill = true;
 
             //assigns another primary to overkillGun rather than using a secondary
-            overkillGun = primary[randomNum(0, 44)];
+            overkillGun = primary[randomNum(0, 46)];
 
             //if the overkill gun equals the primary, assign new primary to overkill gun to avoid duplicate
             while (overkillGun.getName().equals(primaryGun.getName())) {
-                overkillGun = primary[randomNum(0, 44)];
+                overkillGun = primary[randomNum(0, 46)];
             }
 
             //print class details
@@ -203,6 +203,7 @@ public class Cod_Loadout_Randomizer {
         Primary smg6 = new Primary("Striker 45", 6, "Sub Machine Gun");
         Primary smg7 = new Primary("Fennec", 7, "Sub Machine Gun");
         Primary smg8 = new Primary("ISO", 8, "Sub Machine Gun");
+        Primary smg9 = new Primary("CX-9", 9,"Sub Machine Gun");
 
         //Shotguns
         Primary cqb1 = new Primary("Model 680", 1, "Shotgun");
@@ -220,6 +221,7 @@ public class Cod_Loadout_Randomizer {
         Primary lmg5 = new Primary("Holger-26", 5, "Light Machine Gun");
         Primary lmg6 = new Primary("Bruen Mk9", 6, "Light Machine Gun");
         Primary lmg7 = new Primary("FiNN", 7, "Light Machine Gun");
+        Primary lmg8 = new Primary("RAAL MG", 8, "Light Machine Gun");
 
         //marksman rifles
         Primary mrk1 = new Primary("EBR-14", 1, "Marksman Rifle");
@@ -261,35 +263,37 @@ public class Cod_Loadout_Randomizer {
         guns[18] = smg6;
         guns[19] = smg7;
         guns[20] = smg8;
+        guns[21] = smg9;
 
-        guns[21] = cqb1;
-        guns[22] = cqb2;
-        guns[23] = cqb3;
-        guns[24] = cqb4;
-        guns[25] = cqb5;
-        guns[26] = cqb6;
+        guns[22] = cqb1;
+        guns[23] = cqb2;
+        guns[24] = cqb3;
+        guns[25] = cqb4;
+        guns[26] = cqb5;
+        guns[27] = cqb6;
 
-        guns[27] = lmg1;
-        guns[28] = lmg2;
-        guns[29] = lmg3;
-        guns[30] = lmg4;
-        guns[31] = lmg5;
-        guns[32] = lmg6;
-        guns[33] = lmg7;
+        guns[28] = lmg1;
+        guns[29] = lmg2;
+        guns[30] = lmg3;
+        guns[31] = lmg4;
+        guns[32] = lmg5;
+        guns[33] = lmg6;
+        guns[34] = lmg7;
+        guns[35] = lmg8;
 
-        guns[34] = mrk1;
-        guns[35] = mrk2;
-        guns[36] = mrk3;
-        guns[37] = mrk4;
-        guns[38] = mrk5;
-        guns[39] = mrk6;
+        guns[36] = mrk1;
+        guns[37] = mrk2;
+        guns[38] = mrk3;
+        guns[39] = mrk4;
+        guns[40] = mrk5;
+        guns[41] = mrk6;
 
-        guns[40] = snip1;
-        guns[41] = snip2;
-        guns[42] = snip3;
-        guns[43] = snip4;
+        guns[42] = snip1;
+        guns[43] = snip2;
+        guns[44] = snip3;
+        guns[45] = snip4;
 
-        guns[44] = riot;
+        guns[46] = riot;
 
     }//end createPrimaryArray
 
