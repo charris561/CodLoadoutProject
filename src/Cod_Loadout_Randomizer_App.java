@@ -21,6 +21,7 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
     GUI setup
     */
     static JButton createLoadoutButton = new JButton("Create Loadout");
+    static JButton exitButton = new JButton("Exit");
     static JFrame frame = new JFrame("Modern Warfare Loadout Randomizer");
     static JLabel label;
 
@@ -28,61 +29,61 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
 
         new Cod_Loadout_Randomizer_App();
 
-        //store file names as constants
-        final String PRIMARIES_INPUT_FILE = "PrimaryWeapons.csv";
-        final String SECONDARIES_INPUT_FILE = "SecondaryWeapons.csv";
-        final String PERKS_INPUT_FILE = "Perks.csv";
-        final String LETHALS_INPUT_FILE = "Lethals.csv";
-        final String TACTICALS_INPUT_FILE = "Tacticals.csv";
-
-        //boolean to allow user to create multiple classes
-        boolean done = false;
-
-        //create scanner object
-        Scanner input = new Scanner(System.in);
-
-        //checks to see if the user would like to continue
-        while (!done) {
-
-            //create objects and array for class objects
-            //primary
-            ArrayList<Primary> primaryGuns = new ArrayList<>();
-            createPrimaries(primaryGuns, PRIMARIES_INPUT_FILE);
-
-            //secondary
-            ArrayList<Secondary> secondaryGuns = new ArrayList<>();
-            createSecondaries(secondaryGuns, SECONDARIES_INPUT_FILE);
-
-            //secondary
-            ArrayList<Perk> perks = new ArrayList<>();
-            createPerks(perks, PERKS_INPUT_FILE);
-
-            //lethals
-            ArrayList<Lethal> lethals = new ArrayList<>();
-            createLethals(lethals, LETHALS_INPUT_FILE);
-
-            //tacticals
-            ArrayList<Tactical> tacticals = new ArrayList<>();
-            createTacticals(tacticals, TACTICALS_INPUT_FILE);
-
-            //prints class
-            printLoadout(primaryGuns, secondaryGuns, perks, lethals, tacticals);
-
-            //prompt user to see if they want another class
-            boolean continueComputing = continueComputing(input);
-
-            //if they don't want to continue
-            if (!continueComputing) {
-                done = true;
-                System.out.println("\nHave fun my dood\n");
-            }
-
-            //if they do want to continue
-            else {
-                System.out.println("****************************************\n");
-            }
-
-        }//end while
+//        //store file names as constants
+//        final String PRIMARIES_INPUT_FILE = "PrimaryWeapons.csv";
+//        final String SECONDARIES_INPUT_FILE = "SecondaryWeapons.csv";
+//        final String PERKS_INPUT_FILE = "Perks.csv";
+//        final String LETHALS_INPUT_FILE = "Lethals.csv";
+//        final String TACTICALS_INPUT_FILE = "Tacticals.csv";
+//
+//        //boolean to allow user to create multiple classes
+//        boolean done = false;
+//
+//        //create scanner object
+//        Scanner input = new Scanner(System.in);
+//
+//        //checks to see if the user would like to continue
+//        while (!done) {
+//
+//            //create objects and array for class objects
+//            //primary
+//            ArrayList<Primary> primaryGuns = new ArrayList<>();
+//            createPrimaries(primaryGuns, PRIMARIES_INPUT_FILE);
+//
+//            //secondary
+//            ArrayList<Secondary> secondaryGuns = new ArrayList<>();
+//            createSecondaries(secondaryGuns, SECONDARIES_INPUT_FILE);
+//
+//            //secondary
+//            ArrayList<Perk> perks = new ArrayList<>();
+//            createPerks(perks, PERKS_INPUT_FILE);
+//
+//            //lethals
+//            ArrayList<Lethal> lethals = new ArrayList<>();
+//            createLethals(lethals, LETHALS_INPUT_FILE);
+//
+//            //tacticals
+//            ArrayList<Tactical> tacticals = new ArrayList<>();
+//            createTacticals(tacticals, TACTICALS_INPUT_FILE);
+//
+//            //prints class
+//            printLoadout(primaryGuns, secondaryGuns, perks, lethals, tacticals);
+//
+//            //prompt user to see if they want another class
+//            boolean continueComputing = continueComputing(input);
+//
+//            //if they don't want to continue
+//            if (!continueComputing) {
+//                done = true;
+//                System.out.println("\nHave fun my dood\n");
+//            }
+//
+//            //if they do want to continue
+//            else {
+//                System.out.println("****************************************\n");
+//            }
+//
+//        }//end while
 
     }//end main
 
@@ -339,26 +340,46 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
      */
     public Cod_Loadout_Randomizer_App(){
 
+        boolean running = true;
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
+
+        //add action listeners to the buttons
         createLoadoutButton.addActionListener(this);
-        frame.setLayout(new FlowLayout());
+        exitButton.addActionListener(this);
+
+        //add buttons to the frame
         frame.add(createLoadoutButton);
+        frame.add(exitButton);
+
+        frame.setLayout(new FlowLayout());
+
+        //make the frame visible
         frame.setVisible(true);
+
+        while (running) {
+            if (createLoadoutButton.getModel().isPressed()) {
+
+                System.out.println("Button is pressed my dudes");
+                while(createLoadoutButton.getModel().isPressed()){
+                    try{
+                        wait();
+                    }catch(Exception ignored){}
+                }
+
+            } else if (exitButton.getModel().isPressed()){
+                System.out.println("Exit is pressed bro");
+            }
+            else {
+                System.out.println("Nothing is pressed");
+            }
+        }
 
     }//Cod loadout randomizer gui
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        label = new JLabel();
-        label.setText("Here is your loadout my bois");
-
-        JPanel panel = new JPanel();
-
-        panel.add(label);
-
-        frame.add(panel);
 
     }//actionPerformed
 
