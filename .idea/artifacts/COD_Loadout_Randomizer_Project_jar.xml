@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="COD_Loadout_Randomizer_Project:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/COD_Loadout_Randomizer_Project_jar</output-path>
+    <root id="archive" name="COD_Loadout_Randomizer_Project.jar">
+      <element id="module-output" name="COD_Loadout_Randomizer_Project" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: Cod_Loadout_Randomizer_App
+

@@ -15,188 +15,144 @@ import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.util.List;
 
-public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener{
-
-    /*
-    GUI setup
-    */
-    static JButton createLoadoutButton = new JButton("Create Loadout");
-    static JButton exitButton = new JButton("Exit");
-    static JFrame frame = new JFrame("Modern Warfare Loadout Randomizer");
-    static JLabel label;
+public class Cod_Loadout_Randomizer_App{
 
     public static void main(String[] args) throws IOException{
 
-        new Cod_Loadout_Randomizer_App();
+        Loadout loadout = new Loadout();
 
-//        //store file names as constants
-//        final String PRIMARIES_INPUT_FILE = "PrimaryWeapons.csv";
-//        final String SECONDARIES_INPUT_FILE = "SecondaryWeapons.csv";
-//        final String PERKS_INPUT_FILE = "Perks.csv";
-//        final String LETHALS_INPUT_FILE = "Lethals.csv";
-//        final String TACTICALS_INPUT_FILE = "Tacticals.csv";
-//
-//        //boolean to allow user to create multiple classes
-//        boolean done = false;
-//
-//        //create scanner object
-//        Scanner input = new Scanner(System.in);
-//
-//        //checks to see if the user would like to continue
-//        while (!done) {
-//
-//            //create objects and array for class objects
-//            //primary
-//            ArrayList<Primary> primaryGuns = new ArrayList<>();
-//            createPrimaries(primaryGuns, PRIMARIES_INPUT_FILE);
-//
-//            //secondary
-//            ArrayList<Secondary> secondaryGuns = new ArrayList<>();
-//            createSecondaries(secondaryGuns, SECONDARIES_INPUT_FILE);
-//
-//            //secondary
-//            ArrayList<Perk> perks = new ArrayList<>();
-//            createPerks(perks, PERKS_INPUT_FILE);
-//
-//            //lethals
-//            ArrayList<Lethal> lethals = new ArrayList<>();
-//            createLethals(lethals, LETHALS_INPUT_FILE);
-//
-//            //tacticals
-//            ArrayList<Tactical> tacticals = new ArrayList<>();
-//            createTacticals(tacticals, TACTICALS_INPUT_FILE);
-//
-//            //prints class
-//            printLoadout(primaryGuns, secondaryGuns, perks, lethals, tacticals);
-//
-//            //prompt user to see if they want another class
-//            boolean continueComputing = continueComputing(input);
-//
-//            //if they don't want to continue
-//            if (!continueComputing) {
-//                done = true;
-//                System.out.println("\nHave fun my dood\n");
-//            }
-//
-//            //if they do want to continue
-//            else {
-//                System.out.println("****************************************\n");
-//            }
-//
-//        }//end while
+        ImageIcon image = new ImageIcon("memez.jpg"); //create an ImageIcon for image
+        JLabel label = new JLabel(); //create label
+
+        //set text for label
+        if (loadout.getOverKillSecondary() == null) {
+            label.setText(String.format("<html>Cod Weapon Loadout Randomizer:<BR><BR>" +
+                    "Primary: %s<BR>" +
+                    "Secondary: %s<BR><BR>" +
+                    "Perks:<BR>1: %s<BR>2: %s<BR>3: %s<BR><BR>" +
+                    "Lethal: %s<BR>Tactical: %s", loadout.getPrimary().getName(),
+                    loadout.getSecondary().getName(),
+                    loadout.getTierOnePerk().getPerk(),
+                    loadout.getTierTwoPerk().getPerk(),
+                    loadout.getTierThreePerk().getPerk(),
+                    loadout.getLethal().getName(),
+                    loadout.getTactical().getName()));
+        }
+        else{
+            label.setText(String.format("<html>Cod Weapon Loadout Randomizer:<BR><BR>" +
+                            "Primary: %s<BR>" +
+                            "Secondary: %s<BR><BR>" +
+                            "Perks:<BR>1: %s<BR>2: %s<BR>3: %s<BR><BR>" +
+                            "Lethal: %s<BR>Tactical: %s", loadout.getPrimary().getName(),
+                    loadout.getOverKillSecondary().getName(),
+                    loadout.getTierOnePerk().getPerk(),
+                    loadout.getTierTwoPerk().getPerk(),
+                    loadout.getTierThreePerk().getPerk(),
+                    loadout.getLethal().getName(),
+                    loadout.getTactical().getName()));
+        }
+
+        label.setFont(new Font("MV Boli", Font.PLAIN, 20));
+        label.setHorizontalTextPosition(JLabel.CENTER);
+        label.setVerticalTextPosition(JLabel.TOP);
+        label.setVerticalAlignment(JLabel.TOP);
+        label.setHorizontalAlignment(JLabel.CENTER);
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 800);
+        frame.setResizable(false);
+        frame.setVisible(true);
+        frame.add(label);
 
     }//end main
 
-    //finds how many rows are in file passed in
-    public static int findRows(String inputFileName) throws IOException{
+}//end Loadout_Randomizer
 
-        int numRows = 0; //stores number of rows
+//defines a class
+class Loadout {
 
-        //create file and scanner objects
-        File file = new File(inputFileName);
-        Scanner inputFile = new Scanner(file);
+    //private data fields
+    private Primary primary;
+    private Primary overKillSecondary;
+    private Secondary secondary;
+    private Perk tierOnePerk;
+    private Perk tierTwoPerk;
+    private Perk tierThreePerk;
+    private Lethal lethal;
+    private Tactical tactical;
 
-        //while has next line, go to next line and iterate count
-        while (inputFile.hasNextLine()){
-            numRows++;
-            inputFile.nextLine();
-        }
+    //constructor
+    public Loadout() throws IOException {
 
-        //close input file
-        inputFile.close();
+        //creates a class
+        createClass();
 
-        return numRows;
+    }//Loadout
 
-    }//findRows
+    //creates a class
+    private void createClass() throws IOException {
 
-    //sees if the user would like to create another class or not
-    public static boolean continueComputing(Scanner input) {
-        //variable used to track if they want to continue or not
-        boolean userInput = false;
+        //store file names as constants
+        final String PRIMARIES_INPUT_FILE = "PrimaryWeapons.csv";
+        final String SECONDARIES_INPUT_FILE = "SecondaryWeapons.csv";
+        final String PERKS_INPUT_FILE = "Perks.csv";
+        final String LETHALS_INPUT_FILE = "Lethals.csv";
+        final String TACTICALS_INPUT_FILE = "Tacticals.csv";
 
-        System.out.println("****************************************");
-        System.out.println("Would you like to create another class (y/n)");
-        char userChoice = input.next().charAt(0); //used to read in user choice from input
+        //define number of tier 1, 2, and 3 perks
+        int tierOneNum = findRows(PERKS_INPUT_FILE) / 3;
+        int tierTwoNum = tierOneNum * 2;
+        int tierThreeNum = findRows(PERKS_INPUT_FILE) - 1;
 
-        //checks for valid user input
-        while (userChoice != 'y' && userChoice != 'Y' && userChoice != 'n' && userChoice != 'N') {
-            System.out.println("Please enter a valid input (y/n)");
-            userChoice = input.next().charAt(0);
-        }
+        ArrayList<Primary> primaryGuns = new ArrayList<>();
+        createPrimaries(primaryGuns, PRIMARIES_INPUT_FILE);
 
-        //if yes
-        if (userChoice == 'y' || userChoice == 'Y') {
-            userInput = true;
-        }
+        //secondary
+        ArrayList<Secondary> secondaryGuns = new ArrayList<>();
+        createSecondaries(secondaryGuns, SECONDARIES_INPUT_FILE);
 
-        return userInput;
+        //secondary
+        ArrayList<Perk> perks = new ArrayList<>();
+        createPerks(perks, PERKS_INPUT_FILE);
 
-    } // end continueComputing
+        //lethals
+        ArrayList<Lethal> lethals = new ArrayList<>();
+        createLethals(lethals, LETHALS_INPUT_FILE);
 
-    //prints loadout details
-    public static void printLoadout(ArrayList<Primary> primary, ArrayList<Secondary> secondary, ArrayList<Perk> perks, ArrayList<Lethal> lethals, ArrayList<Tactical> tacticals) {
+        //tacticals
+        ArrayList<Tactical> tacticals = new ArrayList<>();
+        createTacticals(tacticals, TACTICALS_INPUT_FILE);
 
-        JLabel header = new JLabel("Here is your loadout my bois");
-        JPanel loadoutPanel = new JPanel();
-        loadoutPanel.add(header);
-        frame.add(loadoutPanel);
+        //select values for instance variables
+        this.primary = primaryGuns.get(randomNum(0, primaryGuns.size() - 1));
+        this.tierOnePerk = perks.get(randomNum(0 , tierOneNum));
+        this.tierTwoPerk = perks.get(randomNum(tierOneNum + 1 , tierTwoNum));
+        this.tierThreePerk = perks.get(randomNum(tierTwoNum + 1, tierThreeNum));
+        this.lethal = lethals.get(randomNum(0, lethals.size() - 1));
+        this.tactical = tacticals.get(randomNum(0, tacticals.size() - 1));
 
-        //set instance variables then assign object when applicable
-        boolean overkill = false;
-        Primary primaryGun = null;
-        Secondary secondaryGun = null;
-        Primary overkillGun = null;
-        Perk perk1 = null;
-        Perk perk2 = null;
-        Perk perk3 = null;
-        Lethal lethal1 = null;
-        Tactical tactical1 = null;
+        //if overkill is picked, the class needs 2 primaries
+        if (tierTwoPerk.getPerk().equals("Overkill")){
 
-        //assign object based on random number generated for array index then stores in instance variables
-        primaryGun = primary.get(randomNum(0, 46));
-        perk1 = perks.get(randomNum(0, 5));
-        perk2 = perks.get(randomNum(6, 11));
-        perk3 = perks.get(randomNum(12, 17));
-        lethal1 = lethals.get(randomNum(0, 7));
-        tactical1 = tacticals.get(randomNum(0, 7));
+            this.overKillSecondary = primaryGuns.get(randomNum(0 , primaryGuns.size() - 1));
 
-        //		perk2 = perks[10]; //sets perk2 to overkill for testing (two primaries)
-
-        //if overkill perk is picked, the class needs 2 primary weapons
-        if (perk2.getPerk().equals("Overkill")) {
-
-            overkill = true;
-
-            //assigns another primary to overkillGun rather than using a secondary
-            overkillGun = primary.get(randomNum(0, 46));
-
-            //if the overkill gun equals the primary, assign new primary to overkill gun to avoid duplicate
-            while (overkillGun.getName().equals(primaryGun.getName())) {
-                overkillGun = primary.get(randomNum(0, 46));
+            //if overkill gun == primary, get new overkill gun
+            while (overKillSecondary.getName().equals(primary.getName())){
+                overKillSecondary = primaryGuns.get(randomNum(0, primaryGuns.size() - 1));
             }
 
-            //print class details
-            System.out.printf("Primary:\n%s %d: %s\n\n", primaryGun.getType(), primaryGun.getNumber(), primaryGun.getName());
-            System.out.printf("Secondary:\n%s %d: %s\n\n", overkillGun.getType(), overkillGun.getNumber(), overkillGun.getName());
-            System.out.printf("Perk 1: %s\nPerk 2: %s\nPerk 3: %s\n\n", perk1.getPerk(), perk2.getPerk(), perk3.getPerk());
-            System.out.printf("Lethal: %s\nTactical: %s\n\n", lethal1.getName(), tactical1.getName());
         }
 
-        //print class without overkill. i.e. a primary and secondary
-        else {
-            secondaryGun = secondary.get(randomNum(0, 12));
-
-            //print class details
-            System.out.printf("Primary:\n%s %d: %s\n\n", primaryGun.getType(), primaryGun.getNumber(), primaryGun.getName());
-            System.out.printf("Secondary:\n%s %d: %s\n\n", secondaryGun.getType(), secondaryGun.getNumber(), secondaryGun.getName());
-            System.out.printf("Perk 1: %s\nPerk 2: %s\nPerk 3: %s\n\n", perk1.getPerk(), perk2.getPerk(), perk3.getPerk());
-            System.out.printf("Lethal: %s\nTactical: %s\n\n", lethal1.getName(), tactical1.getName());
+        //if no overkill, get a secondary weapon
+        else{
+            secondary = secondaryGuns.get(randomNum(0, secondaryGuns.size() - 1));
         }
 
-    }//end printClass
+    }//createClass
 
     //returns a random number between min and max
-    public static int randomNum(int min, int max) {
+    private int randomNum(int min, int max) {
         // define the range
         int range = max - min + 1;
         int rand = (int) (Math.random() * range) + min;
@@ -215,7 +171,7 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
     }// end randomNum
 
     //creates primary objects and stores them in array list
-    public static void createPrimaries(ArrayList<Primary> guns, String inputFileName) throws IOException{
+    private void createPrimaries(ArrayList<Primary> guns, String inputFileName) throws IOException{
 
         //create scanner and file object
         File file = new File(inputFileName);
@@ -243,7 +199,7 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
     }//end createPrimaryArray
 
     //create secondary objects and stores them in array list
-    public static void createSecondaries(ArrayList<Secondary> guns, String inputFileName) throws IOException{
+    private void createSecondaries(ArrayList<Secondary> guns, String inputFileName) throws IOException{
 
         //create scanner and file object
         File file = new File(inputFileName);
@@ -272,7 +228,7 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
     }//end createSecondaryArray
 
     //Create perks and stores them in array list
-    public static void createPerks(ArrayList<Perk> perks, String inputFileName) throws IOException {
+    private void createPerks(ArrayList<Perk> perks, String inputFileName) throws IOException {
 
         //create scanner and file object
         File file = new File(inputFileName);
@@ -285,7 +241,10 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
 
         //create ARs and put them in arraylist
         for (int i = 0; i < numPerks; i++){
-            Perk perk = new Perk(inputFile.next(), inputFile.nextInt());
+            String name = inputFile.next();
+            name = name.replaceAll("(\\r|\\n)", "");
+            int tier = inputFile.nextInt();
+            Perk perk = new Perk(name, tier);
             perks.add(perk);
         }
 
@@ -295,7 +254,7 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
     }//end createPerkArray
 
     //create lethals and store them in array list
-    public static void createLethals(ArrayList<Lethal> lethals, String inputFileName) throws IOException {
+    private void createLethals(ArrayList<Lethal> lethals, String inputFileName) throws IOException {
 
         //create scanner and file object
         File file = new File(inputFileName);
@@ -315,7 +274,7 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
     }//end createLethalArray
 
     //create tacticals and store them in array list
-    public static void createTacticals(ArrayList<Tactical> tacticals, String inputFileName) throws IOException {
+    private void createTacticals(ArrayList<Tactical> tacticals, String inputFileName) throws IOException {
 
         //create scanner and file object
         File file = new File(inputFileName);
@@ -334,56 +293,108 @@ public class Cod_Loadout_Randomizer_App extends JFrame implements ActionListener
 
     }//end createTacticalArray
 
+    //finds how many rows are in file passed in
+    private int findRows(String inputFileName) throws IOException{
 
-    /*
-    More GUI stuff
-     */
-    public Cod_Loadout_Randomizer_App(){
+        int numRows = 0; //stores number of rows
 
-        boolean running = true;
+        //create file and scanner objects
+        File file = new File(inputFileName);
+        Scanner inputFile = new Scanner(file);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
-
-        //add action listeners to the buttons
-        createLoadoutButton.addActionListener(this);
-        exitButton.addActionListener(this);
-
-        //add buttons to the frame
-        frame.add(createLoadoutButton);
-        frame.add(exitButton);
-
-        frame.setLayout(new FlowLayout());
-
-        //make the frame visible
-        frame.setVisible(true);
-
-        while (running) {
-            if (createLoadoutButton.getModel().isPressed()) {
-
-                System.out.println("Button is pressed my dudes");
-                while(createLoadoutButton.getModel().isPressed()){
-                    try{
-                        wait();
-                    }catch(Exception ignored){}
-                }
-
-            } else if (exitButton.getModel().isPressed()){
-                System.out.println("Exit is pressed bro");
-            }
-            else {
-                System.out.println("Nothing is pressed");
-            }
+        //while has next line, go to next line and iterate count
+        while (inputFile.hasNextLine()){
+            numRows++;
+            inputFile.nextLine();
         }
 
-    }//Cod loadout randomizer gui
+        //close input file
+        inputFile.close();
 
+        return numRows;
+
+    }//findRows
+
+    //getters
+    public Primary getPrimary() {
+        return primary;
+    }
+
+    public Primary getOverKillSecondary() {
+        return overKillSecondary;
+    }
+
+    public Secondary getSecondary() {
+        return secondary;
+    }
+
+    public Perk getTierOnePerk() {
+        return tierOnePerk;
+    }
+
+    public Perk getTierTwoPerk() {
+        return tierTwoPerk;
+    }
+
+    public Perk getTierThreePerk() {
+        return tierThreePerk;
+    }
+
+    public Lethal getLethal() {
+        return lethal;
+    }
+
+    public Tactical getTactical() {
+        return tactical;
+    }
+
+    //overwrite toString
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public String toString(){
 
-    }//actionPerformed
+        String loadout;
 
-}//end Loadout_Randomizer
+        if (overKillSecondary == null) {
+            loadout = String.format("""
+                            Primary: %s
+                            Secondary: %s
+                            
+                            Perks:
+                            1: %s
+                            2: %s
+                            3: %S
+                            
+                            Lethal: %s
+                            Tactical: %s
+                            
+                            """,
+                    primary.getName(), secondary.getName(), tierOnePerk.getPerk(),
+                    tierTwoPerk.getPerk(), tierThreePerk.getPerk(),
+                    lethal.getName(), tactical.getName());
+        }
+        else{
+            loadout = String.format("""
+                            Primary: %s
+                            Secondary: %s
+                            
+                            Perks:
+                            1: %s
+                            2: %s
+                            3: %S
+                            
+                            Lethal: %s
+                            Tactical: %s
+                            
+                            """,
+                    primary.getName(), overKillSecondary.getName(), tierOnePerk.getPerk(),
+                    tierTwoPerk.getPerk(), tierThreePerk.getPerk(),
+                    lethal.getName(), tactical.getName());
+        }
+
+        return loadout;
+    }
+
+}//Loadout
 
 //defines a primary weapon
 class Primary {
