@@ -6,14 +6,10 @@ This program takes an array of data and prints out a random loadout
 for the user to use in Call of Duty Modern Warfare 2019
  */
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.*;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.util.List;
 
 public class Cod_Loadout_Randomizer_App{
 
